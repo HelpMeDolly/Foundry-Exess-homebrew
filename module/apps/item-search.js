@@ -26,7 +26,7 @@ export default class ItemSearch extends Application {
     const options = super.defaultOptions;
     options.classes = ["dialog", `solar-background`];
     options.id = "exess-item-search";
-    options.template = "systems/exaltedessence/templates/dialogues/item-search.html"
+    options.template = "systems/exaltedessence-homebrew/templates/dialogues/item-search.html"
     options.resizable = true;
     options.height = 900;
     options.width = 656;

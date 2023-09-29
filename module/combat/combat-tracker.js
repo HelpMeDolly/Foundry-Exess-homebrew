@@ -6,7 +6,7 @@ export class ExaltedCombatTracker extends CombatTracker {
     static get defaultOptions() {
         return {
             ...super.defaultOptions,
-            template: 'systems/exaltedessence/templates/sidebar/combat-tracker.html',
+            template: 'systems/exaltedessence-homebrew/templates/sidebar/combat-tracker.html',
         };
     }
     async getData(options) {

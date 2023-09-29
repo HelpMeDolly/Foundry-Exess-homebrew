@@ -116,6 +116,29 @@
         "lethal": 0,
         "aggravated": 0
       },
+      "willingness": {
+        "levels": {
+          "zero": {
+            "value": 2,
+            "penalty": 0
+          },
+          "one": {
+            "value": 2,
+            "penalty": 1
+          },
+          "two": {
+            "value": 1,
+            "penalty": 2
+          },
+          "inc": {
+            "value": 1,
+            "penalty": "inc"
+          }
+        },
+        "value": 0,
+        "lethal": 0,
+        "aggravated": 0
+      },
       "attributes": {
         "force": {
           "value": 1,
@@ -182,6 +205,10 @@
           "value": 0,
           "name": "ExEss.Sagacity"
         },
+        "medecine": {
+          "value": 0,
+          "name": "ExEss.Medecine"
+        },
         "stealth": {
           "value": 0,
           "name": "ExEss.Stealth"
@@ -218,6 +245,13 @@
       ],
       "creaturetype": "mortal",
       "health": {
+        "max": 0,
+        "value": 0,
+        "levels": 0,
+        "lethal": 0,
+        "aggravated": 0
+      },
+      "willingness": {
         "max": 0,
         "value": 0,
         "levels": 0,
@@ -277,6 +311,7 @@
           "committed": 0,
           "anima": 0,
           "health": 0,
+          "willingness": 0,
           "healthtype": "bashing",
           "stunt": 0,
           "power": 0
@@ -285,6 +320,7 @@
           "motes": 0,
           "anima": 0,
           "health": 0,
+          "willingness": 0,
           "power": 0
         },
         "diceroller": {

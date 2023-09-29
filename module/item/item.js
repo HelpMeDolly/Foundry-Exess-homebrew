@@ -19,10 +19,10 @@ export class ExaltedessenceItem extends Item {
 
   getImageUrl(type) {
     if (type === 'intimacy') {
-      return "systems/exaltedessence/assets/icons/hearts.svg";
+      return "systems/exaltedessence-homebrew/assets/icons/hearts.svg";
     }
     if (type === 'spell') {
-      return "systems/exaltedessence/assets/icons/magic-swirl.svg";
+      return "systems/exaltedessence-homebrew/assets/icons/magic-swirl.svg";
     }
     if (type === 'ritual') {
       return "icons/svg/book.svg";
@@ -37,7 +37,7 @@ export class ExaltedessenceItem extends Item {
       return "icons/svg/sword.svg";
     }
     if (type === 'armor') {
-      return "systems/exaltedessence/assets/icons/breastplate.svg";
+      return "systems/exaltedessence-homebrew/assets/icons/breastplate.svg";
     }
     if (type === 'charm') {
       return "icons/svg/explosion.svg";

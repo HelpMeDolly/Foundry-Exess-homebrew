@@ -252,10 +252,10 @@ export class RollForm extends FormApplication {
             }
             if (this.object.specialAttacksList === undefined) {
                 this.object.specialAttacksList = [
-                    { id: 'aim', name: "Aim", added: false, show: this._isAttackRoll(), description: '+3 Dice, Cannot be used on the same turn as a reflexive move or flurry.', img: 'systems/exaltedessence/assets/icons/targeting.svg' },
-                    { id: 'chopping', name: "Chopping/Powerful", added: false, show: false, description: 'Reduce defense by 1. Increase dice by 2 on withering.  -1 enemy hardness on decisive', img: 'systems/exaltedessence/assets/icons/battered-axe.svg' },
-                    { id: 'piercing', name: "Piercing", added: false, show: false, description: 'Reduce defense by 1.  Ignore 2 soak.', img: 'systems/exaltedessence/assets/icons/fast-arrow.svg' },
-                    { id: 'rush', name: "Rush", added: false, show: this._isAttackRoll(), description: 'Special attack, move 1 range band closer and gain +3 dice on attack.', img: 'systems/exaltedessence/assets/icons/running-ninja.svg' },
+                    { id: 'aim', name: "Aim", added: false, show: this._isAttackRoll(), description: '+3 Dice, Cannot be used on the same turn as a reflexive move or flurry.', img: 'systems/exaltedessence-homebrew/assets/icons/targeting.svg' },
+                    { id: 'chopping', name: "Chopping/Powerful", added: false, show: false, description: 'Reduce defense by 1. Increase dice by 2 on withering.  -1 enemy hardness on decisive', img: 'systems/exaltedessence-homebrew/assets/icons/battered-axe.svg' },
+                    { id: 'piercing', name: "Piercing", added: false, show: false, description: 'Reduce defense by 1.  Ignore 2 soak.', img: 'systems/exaltedessence-homebrew/assets/icons/fast-arrow.svg' },
+                    { id: 'rush', name: "Rush", added: false, show: this._isAttackRoll(), description: 'Special attack, move 1 range band closer and gain +3 dice on attack.', img: 'systems/exaltedessence-homebrew/assets/icons/running-ninja.svg' },
                 ];
             }
 
@@ -307,12 +307,12 @@ export class RollForm extends FormApplication {
     }
 
     get template() {
-        var template = "systems/exaltedessence/templates/dialogues/ability-roll.html";
+        var template = "systems/exaltedessence-homebrew/templates/dialogues/ability-roll.html";
         if (this.object.rollType === 'base') {
-            template = "systems/exaltedessence/templates/dialogues/dice-roll.html";
+            template = "systems/exaltedessence-homebrew/templates/dialogues/dice-roll.html";
         }
         if (this.object.rollType === 'withering' || this.object.rollType === 'decisive' || this.object.rollType === 'gambit') {
-            template = "systems/exaltedessence/templates/dialogues/attack-roll.html";
+            template = "systems/exaltedessence-homebrew/templates/dialogues/attack-roll.html";
         }
         return template;
     }
@@ -402,7 +402,7 @@ export class RollForm extends FormApplication {
     }
 
     async _saveRoll(rollData) {
-        let html = await renderTemplate("systems/exaltedessence/templates/dialogues/save-roll.html", { 'name': this.object.name || 'New Roll' });
+        let html = await renderTemplate("systems/exaltedessence-homebrew/templates/dialogues/save-roll.html", { 'name': this.object.name || 'New Roll' });
         new Dialog({
             title: "Save Roll",
             content: html,
@@ -1336,7 +1336,7 @@ export class RollForm extends FormApplication {
                 }
                 this.actor.createEmbeddedDocuments('ActiveEffect', [{
                     name: "Defense Penalty",
-                    icon: 'systems/exaltedessence/assets/icons/slashed-shield.svg',
+                    icon: 'systems/exaltedessence-homebrew/assets/icons/slashed-shield.svg',
                     origin: this.actor.uuid,
                     disabled: false,
                     duration: {
@@ -1361,7 +1361,7 @@ export class RollForm extends FormApplication {
         else {
             this.object.newTargetData.effects.push({
                 name: 'Onslaught',
-                icon: 'systems/exaltedessence/assets/icons/surrounded-shield.svg',
+                icon: 'systems/exaltedessence-homebrew/assets/icons/surrounded-shield.svg',
                 origin: this.object.target.actor.uuid,
                 disabled: false,
                 duration: {
@@ -1416,7 +1416,7 @@ export class RollForm extends FormApplication {
                 let soakReduction = (this.object.newTargetData.system.soak.value >= 6) ? (Math.ceil(this.object.newTargetData.system.soak.value / 2)) : 2;
                 this.object.newTargetData.effects.push({
                     name: 'Reveal Weakness',
-                    icon: 'systems/exaltedessence/assets/icons/slashed-shield.svg',
+                    icon: 'systems/exaltedessence-homebrew/assets/icons/slashed-shield.svg',
                     origin: this.object.target.actor.uuid,
                     disabled: false,
                     duration: {
@@ -1472,7 +1472,7 @@ export class RollForm extends FormApplication {
         }
         this.object.newTargetData.effects.push({
             name: 'Defense Penalty',
-            icon: 'systems/exaltedessence/assets/icons/slashed-shield.svg',
+            icon: 'systems/exaltedessence-homebrew/assets/icons/slashed-shield.svg',
             origin: this.object.target.actor.uuid,
             disabled: false,
             duration: {

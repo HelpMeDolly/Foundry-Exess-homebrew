@@ -24,9 +24,7 @@
             <option value="alchemical">{{localize "ExEss.Alchemical"}}</option>
             <option value="dragonblooded">{{localize "ExEss.Dragonblooded"}}</option>
             <option value="exigent">{{localize "ExEss.Exigent"}}</option>
-            <option value="getimian">{{localize "ExEss.Getimian"}}</option>
             <option value="infernal">{{localize "ExEss.Infernal"}}</option>
-            <option value="liminal">{{localize "ExEss.Liminal"}}</option>
             <option value="lunar">{{localize "ExEss.Lunar"}}</option>
             <option value="sidereal">{{localize "ExEss.Sidereal"}}</option>
             <option value="solar">{{localize "ExEss.Solar"}}</option>
@@ -42,20 +40,6 @@
       <div class="resources grid grid-3col">
         <div class="resource-content flexrow flex-center flex-between">
           <div>
-            <label class="resource-label">{{localize "ExEss.Motes"}}</label>
-            <div class="resource-content flexrow flex-center flex-between">
-              <input type="number" name="system.motes.value" value="{{system.motes.value}}" data-dtype="Number" />
-              /
-              <div>{{system.motes.max}}</div>
-            </div>
-          </div>
-          <div>
-            <label class="resource-label">{{localize "ExEss.Committed"}}</label>
-            <input type="number" name="system.motes.committed" value="{{system.motes.committed}}" data-dtype="Number" />
-          </div>
-        </div>
-        <div class="resource-content flexrow flex-center flex-between">
-          <div>
             <a><i id="anima-down" class="fas fa-caret-down cursor-pointer"></i></a><label
               class="resource-label">{{localize
               "ExEss.Anima"}}</label><a><i id="anima-up" class="fas fa-caret-up cursor-pointer"></i></a>
@@ -66,26 +50,6 @@
           </div>
         </div>
         <div class="resource-content flexrow flex-center flex-between">
-          {{#ifEquals system.details.exalt 'getimian'}}
-          <div>
-            <label class="resource-label"><a><i class="fas fa-burn set-pool-flowing cursor-pointer"
-                  title="Spend motes from this pool"></i></a> {{localize "ExEss.Flowing"}}</label>
-            <div class="resource-content flexrow flex-center flex-between">
-              <input type="number" name="system.flowing.value" value="{{system.flowing.value}}" data-dtype="Number" />
-              /
-              <input type="number" name="system.flowing.total" value="{{system.flowing.total}}" data-dtype="Number" />
-            </div>
-          </div>
-          <div>
-            <label class="resource-label"><a><i class="fas fa-burn set-pool-still cursor-pointer"
-                  title="Spend motes from this pool"></i></a> {{localize "ExEss.Still"}}</label>
-            <div class="resource-content flexrow flex-center flex-between">
-              <input type="number" name="system.still.value" value="{{system.still.value}}" data-dtype="Number" />
-              /
-              <input type="number" name="system.still.total" value="{{system.still.total}}" data-dtype="Number" />
-            </div>
-          </div>
-          {{/ifEquals}}
           {{#ifEquals system.details.exalt 'lunar'}}
           <div>
             <label class="resource-label">{{localize "ExEss.SacredHunt"}}</label>
@@ -105,12 +69,6 @@
               <option value="wood">{{localize "ExEss.Wood"}}</option>
               {{/select}}
             </select>
-          </div>
-          {{/ifEquals}}
-          {{#ifEquals system.details.exalt 'liminal'}}
-          <div>
-            <label class="resource-label">{{localize "ExEss.Nature"}}</label>
-            <input type="text" name="system.details.nature" value="{{system.details.nature}}" />
           </div>
           {{/ifEquals}}
 
@@ -142,11 +100,30 @@
             </div>
           </div>
         </div>
-        <div class="flex-center">
-          <button id="catchBreath"><i class="fas fa-heartbeat" title="Spend a scene resting"></i>{{localize
-            "ExEss.CatchBreath"}}</button>
-          <button id="fullRest"><i class="fas fa-moon" title="Full nights rest"></i>{{localize
-            "ExEss.FullRest"}}</button>
+        <div class="resource flex-group-center d-flex">
+          <div style="width:180px;margin-right:20px;">
+            <div class="flexrow">
+              <label for="system.willingness" class="resource-label"><a><i class="fas fa-calculator cursor-pointer"
+                    id="calculate-willingness" style="margin-right:3px;" title="Calculate Will"></i></a>{{localize
+                "ExEss.Will"}}<a><i id="recoveryWillScene" title="Recovery Scene"
+                    class="fas fa-plus-square cursor-pointer" style="margin-left:3px;"></i></a></label>
+            </div>
+            <div class="resource-content flexrow flex-center flex-between">
+              <div class="resource-counter" data-states="/:lethal,x:aggravated" data-max="{{system.willingness.max}}"
+                data-lethal="{{system.willingness.lethal}}" data-aggravated="{{system.willingness.aggravated}}"
+                data-name="system.willingness">
+                {{#numLoop system.willingness.max}}
+                <span class="resource-counter-step" data-index="{{this}}" data-state=""></span>
+                {{/numLoop}}
+              </div>
+            </div>
+          </div>
+          <div>
+            <div class="flex-center">
+              <div class="resource-label">{{localize "ExEss.WillingnessPenalty"}}</div>
+              <div>-{{system.willingness.penalty}}</div>
+            </div>
+          </div>
         </div>
       </div>
       <div class="resources grid  grid-3col">
@@ -193,25 +170,7 @@
     SOFTWARE. -->
 
     {{!-- Stats Tab --}}
-    <div class="tab flex-center" data-group="primary" data-tab="stats">
-      <div style="padding-top:10px;">
-        <label class="resource-label">{{localize "ExEss.Attributes"}}</label>
-      </div>
-      <div class="attributes grid grid-3col flex-group-center">
-        {{#each system.attributes as |attribute key|}}
-        <div class="attribute flexrow flex-center">
-          <label for="system.attributes.{{key}}.value" class="resource-label resource-value"
-            data-roll="{{attribute.value}}" data-label="{{attribute.name}}">{{localize attribute.name}}{{#ifEquals
-            ../system.details.exalt 'alchemical'}}<i title="Toggle Augmented Attribute" data-name="{{key}}"
-              class="augment-attribute fas fa-cog {{#if attribute.aug}}augment-attribute-active{{/if}}"></i>{{/ifEquals}}</label>
-          <div class="resource-value" data-value="{{attribute.value}}" data-name="system.attributes.{{key}}.value">
-            {{#numLoop 5}}
-            <span class="resource-value-step" data-index="{{this}}"></span>
-            {{/numLoop}}
-          </div>
-        </div>
-        {{/each}}
-      </div>
+    <div style="padding-top:10px;" class="tab flex-center" data-group="primary" data-tab="stats">
       <label class="resource-label">{{localize "ExEss.Abilities"}}<a><i id="rollAbility"
             class="fas fa-dice-d10 cursor-pointer rollAbility" style="margin-left:5px;"></i></a></label>
       <div class="attributes grid grid-3col flex-group-center">
@@ -230,71 +189,28 @@
       </div>
       <div>
         <div id="character-combat-tab">
-          <div class="grid grid-2col flex-group-center">
-            <div class="resource-content flexrow flex-center flex-between">
+          <div class="resource-content flexrow flex-center flex-between"></div>
+            <div class="grid grid-4col flex-group-center">
               <div>
                 <label class="resource-label">{{localize "ExEss.Power"}}</label>
                 <input type="number" name="system.power.value" value="{{system.power.value}}" data-dtype="Number" />
               </div>
-              <div>
-                <label class="resource-label">{{localize "ExEss.Will"}}</label>
-                <input type="number" name="system.will.value" value="{{system.will.value}}" data-dtype="Number" />
-              </div>
-              <div>
-                <label class="resource-label">{{localize "ExEss.Stunt"}} {{localize "ExEss.Dice"}}</label>
-                <input type="number" name="system.stunt.value" value="{{system.stunt.value}}" data-dtype="Number" />
-              </div>
-            </div>
-            <div class="resource-content flexrow flex-center flex-between">
-              <div>
-                <label class="resource-label">{{localize "ExEss.BuildPower"}}</label>
-                <button id="buildPower" class="roll-button"><i class="fas fa-bolt"></i>{{localize
-                  "ExEss.Roll"}}</button>
-              </div>
-              <div>
-                <label class="resource-label">{{localize "ExEss.FocusWill"}}</label>
-                <button id="focusWill" class="roll-button"><i class="fas fa-hat-wizard"></i>{{localize
-                  "ExEss.Roll"}}</button>
-              </div>
+                <div>
+                  <label class="resource-label">{{localize "ExEss.Soak"}}</label>
+                  <input type="number" name="system.soak.value" value="{{system.soak.value}}" data-dtype="Number" />
+                </div>
+                <div>
+                  <label class="resource-label">{{localize "ExEss.Hardness"}}</label>
+                  <input type="number" name="system.hardness.value" value="{{system.hardness.value}}"
+                    data-dtype="Number" />
+                </div>
+                <div>
+                  <label class="resource-label">{{localize "ExEss.Resolve"}}</label>
+                  <input type="number" name="system.resolve.value" value="{{system.resolve.value}}" data-dtype="Number" />
+                </div>
             </div>
           </div>
-          <div class="grid grid-4col flex-group-center">
-            <div class="resource-content flexrow flex-center flex-between">
-              <div>
-                <label class="resource-label">{{localize "ExEss.Parry"}}</label>
-                <input type="number" name="system.parry.value" value="{{system.parry.value}}" data-dtype="Number" />
-              </div>
-            </div>
-            <div class="resource-content flexrow flex-center flex-between">
-              <div>
-                <label class="resource-label">{{localize "ExEss.Evasion"}}</label>
-                <input type="number" name="system.evasion.value" value="{{system.evasion.value}}" data-dtype="Number" />
-              </div>
-            </div>
-            <div class="resource-content flexrow flex-center flex-between">
-              <div>
-                <label class="resource-label">{{localize "ExEss.Soak"}}</label>
-                <input type="number" name="system.soak.value" value="{{system.soak.value}}" data-dtype="Number" />
-              </div>
-              <div>
-                <label class="resource-label">{{localize "ExEss.Hardness"}}</label>
-                <input type="number" name="system.hardness.value" value="{{system.hardness.value}}"
-                  data-dtype="Number" />
-              </div>
-            </div>
-            <div class="resource-content flexrow flex-center flex-between">
-              <div>
-                <label class="resource-label">{{localize "ExEss.Resolve"}}</label>
-                <input type="number" name="system.resolve.value" value="{{system.resolve.value}}" data-dtype="Number" />
-              </div>
-              <div>
-                <label class="resource-label">{{localize "ExEss.Social"}}</label>
-                <button id="socialInfluence" class="roll-button"><i class="fas fa-heart"></i>{{localize
-                  "ExEss.Roll"}}</button>
-              </div>
-            </div>
-          </div>
-          {{> systems/exaltedessence/templates/actor/equipment-list.html}}
+          {{> systems/exaltedessence-homebrew/templates/actor/equipment-list.html}}
         </div>
       </div>
     </div>
@@ -319,17 +235,17 @@
           <label class="resource-label">{{localize "ExEss.Iconic"}}</label>
           <textarea type="text" name="system.anima.iconic" rows="4">{{system.anima.iconic}}</textarea>
         </li>
-        {{> systems/exaltedessence/templates/actor/charm-list.html}}
+        {{> systems/exaltedessence-homebrew/templates/actor/charm-list.html}}
       </ol>
     </div>
 
     <div class="tab effects" data-group="primary" data-tab="effects">
-      {{> systems/exaltedessence/templates/actor/effects-tab.html}}
+      {{> systems/exaltedessence-homebrew/templates/actor/effects-tab.html}}
     </div>
 
     {{!-- Intimacy Tab --}}
     <div class="tab intimacies" data-group="primary" data-tab="intimacies">
-      {{> systems/exaltedessence/templates/actor/intimacies-list.html}}
+      {{> systems/exaltedessence-homebrew/templates/actor/intimacies-list.html}}
     </div>
 
     {{!-- Advantages Tab --}}

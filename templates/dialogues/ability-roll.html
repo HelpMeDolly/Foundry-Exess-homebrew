@@ -1,7 +1,7 @@
 <form>
     <div class="sheet-body exaltedessence">
         {{#if data.addingCharms }}
-        {{> systems/exaltedessence/templates/dialogues/add-roll-charm.html}}
+        {{> systems/exaltedessence-homebrew/templates/dialogues/add-roll-charm.html}}
         {{else}}  
         {{#ifEquals data.rollType 'base'}}
         <div class="flex-center resource-label" style="font-weight: bold;">
@@ -22,7 +22,7 @@
             </select>
         </div>
         {{/ifEquals}}
-        {{> systems/exaltedessence/templates/dialogues/ability-base.html}}
+        {{> systems/exaltedessence-homebrew/templates/dialogues/ability-base.html}}
         {{#ifEquals data.rollType 'social'}}
         <div class="resource grid grid-2col flex-center">
             <div>

@@ -32,6 +32,7 @@
         <option value="presence">{{localize "ExEss.Presence"}}</option>
         <option value="ranged">{{localize "ExEss.RangedCombat"}}</option>
         <option value="sagacity">{{localize "ExEss.Sagacity"}}</option>
+        <option value="medecine">{{localize "ExEss.Medecine"}}</option>
         <option value="stealth">{{localize "ExEss.Stealth"}}</option>
         <option value="war">{{localize "ExEss.War"}}</option>
         <option value="martial">{{localize "ExEss.MartialArts"}}</option>
@@ -158,7 +159,7 @@
 </div>
 
 {{#ifNotEquals data.rollType 'base'}}
-{{> systems/exaltedessence/templates/dialogues/added-charm-list.html}}
+{{> systems/exaltedessence-homebrew/templates/dialogues/added-charm-list.html}}
 <div class="d-flex flex-between mb-1 collapsable cursor-pointer">
     <div class="resource-label">
         {{localize "ExEss.Effects"}}

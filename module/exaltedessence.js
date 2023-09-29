@@ -78,16 +78,16 @@ Hooks.once('init', async function () {
 
   // Pre-load templates
   loadTemplates([
-    "systems/exaltedessence/templates/dialogues/ability-base.html",
-    "systems/exaltedessence/templates/dialogues/add-roll-charm.html",
-    "systems/exaltedessence/templates/dialogues/added-charm-list.html",
-    "systems/exaltedessence/templates/actor/active-effects.html",
-    "systems/exaltedessence/templates/actor/effects-tab.html",
-    "systems/exaltedessence/templates/actor/equipment-list.html",
-    "systems/exaltedessence/templates/actor/charm-list.html",
-    "systems/exaltedessence/templates/actor/intimacies-list.html",
-    "systems/exaltedessence/templates/dialogues/accuracy-roll.html",
-    "systems/exaltedessence/templates/dialogues/damage-roll.html",
+    "systems/exaltedessence-homebrew/templates/dialogues/ability-base.html",
+    "systems/exaltedessence-homebrew/templates/dialogues/add-roll-charm.html",
+    "systems/exaltedessence-homebrew/templates/dialogues/added-charm-list.html",
+    "systems/exaltedessence-homebrew/templates/actor/active-effects.html",
+    "systems/exaltedessence-homebrew/templates/actor/effects-tab.html",
+    "systems/exaltedessence-homebrew/templates/actor/equipment-list.html",
+    "systems/exaltedessence-homebrew/templates/actor/charm-list.html",
+    "systems/exaltedessence-homebrew/templates/actor/intimacies-list.html",
+    "systems/exaltedessence-homebrew/templates/dialogues/accuracy-roll.html",
+    "systems/exaltedessence-homebrew/templates/dialogues/damage-roll.html",
   ]);
 
   async function handleSocket({ type, id, data, addStatuses = [] }) {
@@ -283,7 +283,7 @@ async function createItemMacro(data, slot) {
         game.rollForm = new game.exaltedessence.RollForm(${data.actorId.includes('Token') ? 'formActor.actor' : 'formActor'}, {}, {}, { rollId: "${data.id}" }).render(true); `;
     const macro = await Macro.create({
       name: data.name,
-      img: 'systems/exaltedessence/assets/icons/d10.svg',
+      img: 'systems/exaltedessence-homebrew/assets/icons/d10.svg',
       type: "script",
       command: command,
     });

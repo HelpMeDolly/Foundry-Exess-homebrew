@@ -27,6 +27,7 @@ export class ExaltedessenceActor extends Actor {
     const data = actorData.system;
     this._prepareBaseActorData(data);
     let totalHealth = 0;
+    let totalWillingness = 0;
     let currentPenalty = 0;
     data.motes.max = data.essence.value * 2 + Math.floor((data.essence.value - 1) / 2) + 3;
     for (let [key, health_level] of Object.entries(data.health.levels)) {
@@ -45,6 +46,23 @@ export class ExaltedessenceActor extends Actor {
     }
     data.health.value = data.health.max - data.health.aggravated - data.health.lethal;
     data.health.penalty = currentPenalty;
+
+    for (let [key, willingness_level] of Object.entries(data.willingness.levels)) {
+      if ((data.willingness.lethal + data.willingness.aggravated) > totalWillingness) {
+        currentPenalty = willingness_level.penalty;
+      }
+      totalWillingness += willingness_level.value;
+    }
+    data.willingness.max = totalWillingness;
+    if (data.willingness.aggravated + data.willingness.lethal > data.willingness.max) {
+      data.willingness.aggravated = data.willingness.max - data.willingness.lethal
+      if (data.willingness.aggravated <= 0) {
+        data.willingness.aggravated = 0
+        data.willingness.lethal = data.willingness.max
+      }
+    }
+    data.willingness.value = data.willingness.max - data.willingness.aggravated - data.willingness.lethal;
+    data.willingness.penalty = currentPenalty;
 
     const gear = [];
     const weapons = [];
@@ -70,6 +88,7 @@ export class ExaltedessenceActor extends Actor {
       presence: { name: 'ExEss.Presence', visible: false, list: [] },
       ranged: { name: 'ExEss.RangedCombat', visible: false, list: [] },
       sagacity: { name: 'ExEss.Sagacity', visible: false, list: [] },
+      medecine: { name: 'ExEss.Medecine', visible: false, list: [] },
       stealth: { name: 'ExEss.Stealth', visible: false, list: [] },
       war: { name: 'ExEss.War', visible: false, list: [] },
       martial: { name: 'ExEss.MartialArts', visible: false, list: [] },
@@ -147,6 +166,12 @@ export class ExaltedessenceActor extends Actor {
     }
     data.health.value = data.health.max - data.health.aggravated - data.health.lethal;
     data.health.penalty = currentPenalty;
+
+    if (data.willingness.levels > 1 && ((data.willingness.lethal + data.willingness.aggravated) >= Math.floor(data.willingness.levels / 2))) {
+      currentPenalty = 2;
+    }
+    data.willingness.value = data.willingness.max - data.willingness.aggravated - data.willingness.lethal;
+    data.willingness.penalty = currentPenalty;
   }
 
   async _preUpdate(updateData, options, user) {
@@ -241,7 +266,7 @@ export async function addDefensePenalty(actor, label = "Defense Penalty") {
     }
     actor.createEmbeddedDocuments('ActiveEffect', [{
       name: label,
-      icon: 'systems/exaltedessence/assets/icons/slashed-shield.svg',
+      icon: 'systems/exaltedessence-homebrew/assets/icons/slashed-shield.svg',
       origin: actor.uuid,
       disabled: false,
       duration: {

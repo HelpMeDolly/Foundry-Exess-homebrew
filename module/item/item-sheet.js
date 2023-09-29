@@ -24,7 +24,7 @@ export class ExaltedessenceItemSheet extends ItemSheet {
 
   /** @override */
   get template() {
-    const path = "systems/exaltedessence/templates/item";
+    const path = "systems/exaltedessence-homebrew/templates/item";
     // Return a single sheet for all item types.
     // return `${path}/item-sheet.html`;
 

@@ -67,13 +67,13 @@ EXALTEDESSENCE.armortags = {
 
 EXALTEDESSENCE.statusEffects = [
     {
-        icon: 'systems/exaltedessence/assets/icons/drop-weapon.svg',
+        icon: 'systems/exaltedessence-homebrew/assets/icons/drop-weapon.svg',
         id: 'disarmed',
         label: 'ExEss.Disarmed',
         name: 'disarmed'
     },
     {
-        icon: 'systems/exaltedessence/assets/icons/fishing-net.svg',
+        icon: 'systems/exaltedessence-homebrew/assets/icons/fishing-net.svg',
         id: 'ensnared',
         label: 'ExEss.Ensnared',
         name: 'ensnared'
@@ -103,7 +103,7 @@ EXALTEDESSENCE.statusEffects = [
         name: 'surprised'
     },
     {
-        icon: 'systems/exaltedessence/assets/icons/hooded-figure.svg', 
+        icon: 'systems/exaltedessence-homebrew/assets/icons/hooded-figure.svg', 
         id: 'concealment',
         label: 'ExEss.Concealment',
         name: 'concealment'

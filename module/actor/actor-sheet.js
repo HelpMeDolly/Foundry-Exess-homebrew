@@ -27,15 +27,15 @@ export class ExaltedessenceActorSheet extends ActorSheet {
  * @type {String}
  */
   get template() {
-    if (this.actor.type === "npc") return "systems/exaltedessence/templates/actor/npc-sheet.html";
-    return "systems/exaltedessence/templates/actor/actor-sheet.html";
+    if (this.actor.type === "npc") return "systems/exaltedessence-homebrew/templates/actor/npc-sheet.html";
+    return "systems/exaltedessence-homebrew/templates/actor/actor-sheet.html";
   }
 
   /** @override */
   static get defaultOptions() {
     return mergeObject(super.defaultOptions, {
       classes: ["exaltedessence", "sheet", "actor"],
-      template: "systems/exaltedessence/templates/actor/actor-sheet.html",
+      template: "systems/exaltedessence-homebrew/templates/actor/actor-sheet.html",
       width: 800,
       height: 1026,
       tabs: [{ navSelector: ".sheet-tabs", contentSelector: ".sheet-body", initial: "stats" }]
@@ -120,6 +120,7 @@ export class ExaltedessenceActorSheet extends ActorSheet {
       presence: { name: 'ExEss.Presence', visible: false, list: [] },
       ranged: { name: 'ExEss.RangedCombat', visible: false, list: [] },
       sagacity: { name: 'ExEss.Sagacity', visible: false, list: [] },
+      medecine: { name: 'ExEss.Medecine', visible: false, list: [] },
       stealth: { name: 'ExEss.Stealth', visible: false, list: [] },
       war: { name: 'ExEss.War', visible: false, list: [] },
       martial: { name: 'ExEss.MartialArts', visible: false, list: [] },
@@ -324,12 +325,20 @@ export class ExaltedessenceActorSheet extends ActorSheet {
       this.showTags('armor');
     });
 
+    html.find('#calculate-willingness').mousedown(ev => {
+      this.calculateWill();
+    });
+
     html.find('#calculate-health').mousedown(ev => {
       this.calculateHealth();
     });
 
     html.find('#color-picker').mousedown(ev => {
       this.pickColor();
+    });
+
+    html.find('#recoveryWillScene').mousedown(ev => {
+      this.recoverWill();
     });
 
     html.find('#recoveryScene').mousedown(ev => {
@@ -510,11 +519,11 @@ export class ExaltedessenceActorSheet extends ActorSheet {
     let html;
 
     if (actorData.type === 'npc') {
-      template = "systems/exaltedessence/templates/dialogues/calculate-npc-health.html";
+      template = "systems/exaltedessence-homebrew/templates/dialogues/calculate-npc-health.html";
       html = await renderTemplate(template, { 'health': data.health.levels });
     }
     else {
-      template = "systems/exaltedessence/templates/dialogues/calculate-health.html";
+      template = "systems/exaltedessence-homebrew/templates/dialogues/calculate-health.html";
       html = await renderTemplate(template, { 'zero': data.health.levels.zero.value, 'one': data.health.levels.one.value, 'two': data.health.levels.two.value });
     }
     new Dialog({
@@ -547,6 +556,51 @@ export class ExaltedessenceActorSheet extends ActorSheet {
     }, { classes: ["dialog", `${game.settings.get("exaltedessence", "sheetStyle")}-background`] }).render(true);
   }
 
+  async calculateWill() {
+    let confirmed = false;
+    const actorData = duplicate(this.actor);
+    const data = actorData.system;
+    let template;
+    let html;
+
+    if (actorData.type === 'npc') {
+      template = "systems/exaltedessence-homebrew/templates/dialogues/calculate-npc-willingness.html";
+      html = await renderTemplate(template, { 'willingness': data.willingness.levels });
+    }
+    else {
+      template = "systems/exaltedessence-homebrew/templates/dialogues/calculate-npc-willingness.html";
+      html = await renderTemplate(template, { 'zero': data.willingness.levels.zero.value, 'one': data.willingness.levels.one.value, 'two': data.willingness.levels.two.value });
+    }
+    new Dialog({
+      title: `Calculate Willingness`,
+      content: html,
+      buttons: {
+        roll: { label: "Save", callback: () => confirmed = true },
+        cancel: { label: "Cancel", callback: () => confirmed = false }
+      },
+      close: html => {
+        if (confirmed) {
+          data.willingness.lethal = 0;
+          data.willingness.aggravated = 0;
+          if (actorData.type === 'npc') {
+            let willingness = parseInt(html.find('#willingness').val()) || 0;
+            data.willingness.levels = willingness;
+            data.willingness.max = willingness;
+          }
+          else {
+            let zero = parseInt(html.find('#zero').val()) || 0;
+            let one = parseInt(html.find('#one').val()) || 0;
+            let two = parseInt(html.find('#two').val()) || 0;
+            data.willingness.levels.zero.value = zero;
+            data.willingness.levels.one.value = one;
+            data.willingness.levels.two.value = two;
+          }
+          this.actor.update(actorData);
+        }
+      }
+    }, { classes: ["dialog", `${game.settings.get("exaltedessence", "sheetStyle")}-background`] }).render(true);
+  }
+
   async catchBreath() {
     const actorData = duplicate(this.actor);
     const data = actorData.system;
@@ -564,8 +618,15 @@ export class ExaltedessenceActorSheet extends ActorSheet {
     this.actor.update(actorData);
   }
 
+  async recoverWill() {
+    const actorData = duplicate(this.actor);
+    const data = actorData.system;
+    data.willingness.lethal = 0;
+    this.actor.update(actorData);
+  }
+
   async showTags(type) {
-    const template = type === "weapons" ? "systems/exaltedessence/templates/dialogues/weapon-tags.html" : "systems/exaltedessence/templates/dialogues/armor-tags.html";
+    const template = type === "weapons" ? "systems/exaltedessence-homebrew/templates/dialogues/weapon-tags.html" : "systems/exaltedessence-homebrew/templates/dialogues/armor-tags.html";
     const html = await renderTemplate(template);
     new Dialog({
       title: `Tags`,
@@ -587,7 +648,7 @@ export class ExaltedessenceActorSheet extends ActorSheet {
 
   async helpDialogue(type) {
     let confirmed = false;
-    const template = "systems/exaltedessence/templates/dialogues/help-dialogue.html"
+    const template = "systems/exaltedessence-homebrew/templates/dialogues/help-dialogue.html"
     const html = await renderTemplate(template, { 'type': type });
     new Dialog({
       title: `ReadMe`,
@@ -602,7 +663,7 @@ export class ExaltedessenceActorSheet extends ActorSheet {
     let confirmed = false;
     const actorData = duplicate(this.actor);
     const data = actorData.system;
-    const template = "systems/exaltedessence/templates/dialogues/color-picker.html"
+    const template = "systems/exaltedessence-homebrew/templates/dialogues/color-picker.html"
     const html = await renderTemplate(template, { 'color': data.details.color, animaColor: data.details.animacolor });
     new Dialog({
       title: `Pick Color`,
@@ -881,7 +942,7 @@ export class ExaltedessenceActorSheet extends ActorSheet {
       item: item,
       labels: this.labels,
     };
-    const html = await renderTemplate("systems/exaltedessence/templates/chat/item-card.html", templateData);
+    const html = await renderTemplate("systems/exaltedessence-homebrew/templates/chat/item-card.html", templateData);
 
     // Create the ChatMessage data object
     const chatData = {
