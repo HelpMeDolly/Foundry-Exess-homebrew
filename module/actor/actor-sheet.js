@@ -345,14 +345,6 @@ export class ExaltedessenceActorSheet extends ActorSheet {
       this.recoverHealth();
     });
 
-    html.find('#catchBreath').mousedown(ev => {
-      this.catchBreath();
-    });
-
-    html.find('#fullRest').mousedown(ev => {
-      this.fullRest();
-    });
-
     html.find('#rollDice').mousedown(ev => {
       new RollForm(this.actor, { event: ev }, {}, { rollType: 'base' }).render(true);
     });
@@ -601,16 +593,6 @@ export class ExaltedessenceActorSheet extends ActorSheet {
     }, { classes: ["dialog", `${game.settings.get("exaltedessence", "sheetStyle")}-background`] }).render(true);
   }
 
-  async catchBreath() {
-    const actorData = duplicate(this.actor);
-    const data = actorData.system;
-    data.anima.value = 0;
-    data.motes.max = data.essence.value * 2 + Math.floor((data.essence.value - 1) / 2) + 3;
-    data.motes.value = Math.min(data.motes.value + Math.ceil(data.motes.max / 2), data.motes.max);
-    this.actor.update(actorData);
-    this._updateAnima("down");
-  }
-
   async recoverHealth() {
     const actorData = duplicate(this.actor);
     const data = actorData.system;
@@ -635,15 +617,6 @@ export class ExaltedessenceActorSheet extends ActorSheet {
         cancel: { label: "Close" }
       }
     }, { classes: ["dialog", `${game.settings.get("exaltedessence", "sheetStyle")}-background`] }).render(true);
-  }
-
-  async fullRest() {
-    const actorData = duplicate(this.actor);
-    const data = actorData.system;
-    data.anima.value = 0;
-    data.motes.max = data.essence.value * 2 + Math.floor((data.essence.value - 1) / 2) + 3;
-    data.motes.value = data.motes.max;
-    this.actor.update(actorData);
   }
 
   async helpDialogue(type) {

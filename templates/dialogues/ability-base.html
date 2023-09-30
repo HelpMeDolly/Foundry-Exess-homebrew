@@ -5,17 +5,32 @@
 <div class="resource grid grid-4col flex-center">
     {{#ifEquals data.characterType 'character'}}
 
-    <label class="resource-label">{{localize "ExEss.Attribute"}}: </label>
-    <select id="attribute-select" name="object.attribute" value="{{data.attribute}}" data-type="String">
-        {{#select data.attribute}}
-        <option value="force">{{localize "ExEss.Force"}}</option>
-        <option value="finesse">{{localize "ExEss.Finesse"}}</option>
-        <option value="fortitude">{{localize "ExEss.Fortitude"}}</option>
+    <label class="resource-label">{{localize "ExEss.Ability"}}: </label>
+    <select id="ability-first-select" name="object.abilityFirst" value="{{data.abilityFirst}}" data-type="String">
+        {{#select data.abilityFirst}}
+        <option value="athletics">{{localize "ExEss.Athletics"}}</option>
+        <option value="awareness">{{localize "ExEss.Awareness"}}</option>
+        <option value="close">{{localize "ExEss.CloseCombat"}}</option>
+        <option value="craft">{{localize "ExEss.Craft"}}</option>
+        <option value="embassy">{{localize "ExEss.Embassy"}}</option>
+        <option value="integrity">{{localize "ExEss.Integrity"}}</option>
+        <option value="navigate">{{localize "ExEss.Navigate"}}</option>
+        <option value="performance">{{localize "ExEss.Performance"}}</option>
+        <option value="physique">{{localize "ExEss.Physique"}}</option>
+        <option value="presence">{{localize "ExEss.Presence"}}</option>
+        <option value="ranged">{{localize "ExEss.RangedCombat"}}</option>
+        <option value="sagacity">{{localize "ExEss.Sagacity"}}</option>
+        <option value="medecine">{{localize "ExEss.Medecine"}}</option>
+        <option value="stealth">{{localize "ExEss.Stealth"}}</option>
+        <option value="war">{{localize "ExEss.War"}}</option>
+        <option value="martial">{{localize "ExEss.MartialArts"}}</option>
         {{/select}}
     </select>
 
     <label class="resource-label">{{localize "ExEss.Excellency"}}: </label>
-    <input class="excellency-check" type="checkbox" name="object.attributeExcellency" {{checked data.attributeExcellency}}>
+    <input class="excellency-check-first" type="checkbox" name="object.abilityFirstExcellency" {{checked
+        data.abilityFirstExcellency}}>
+
 
     <label class="resource-label">{{localize "ExEss.Ability"}}: </label>
     <select name="object.ability" value="{{data.ability}}" data-type="String">
@@ -44,7 +59,6 @@
         data.abilityExcellency}}>
 
     {{/ifEquals}}
-
 
     {{#ifEquals data.characterType 'npc'}}
 
@@ -92,74 +106,7 @@
     </div>
 </div>
 
-<div class="d-flex flex-between mb-1 collapsable cursor-pointer">
-    <div class="resource-label">
-        {{localize "ExEss.OtherModifiers"}}
-    </div>
-    <div>
-        <i class="fas fa-caret-down"></i>
-    </div>
-</div>
-<div style="display:none;">
-    <div class="resource grid grid-2col flex-center">
-        <label class="resource-label">{{localize "ExEss.RerollNumDice"}} </label>
-        <input type="number" name="object.rerollNumber" value="{{data.rerollNumber}}">
-        <label class="resource-label">{{localize "ExEss.DicetoSuccesses"}} </label>
-        <input type="number" name="object.diceToSuccesses" value="{{data.diceToSuccesses}}">
-        <label class="resource-label">{{localize "ExEss.RerollFailed"}}: </label>
-        <input type="checkbox" name="object.rerollFailed" value="{{data.rerollFailed}}" {{checked data.rerollFailed}}>
-        <label class="resource-label">{{localize "ExEss.RollTwiceKeepHighest"}}: </label>
-        <input type="checkbox" name="object.rollTwice" value="{{data.rollTwice}}" {{checked data.rollTwice}}>
-    </div>
-    <div class="resource flex-center">
-        <label class="resource-label">{{localize "ExEss.Reroll"}}</label>
-    </div>
-    <div class="resource d-flex flex-center">
-        <div>
-            <div>1</div>
-            <input name="object.reroll.one.status" type="checkbox" {{checked data.reroll.one.status}}>
-        </div>
-        <div>
-            <div>2</div>
-            <input name="object.reroll.two.status" type="checkbox" {{checked data.reroll.two.status}}>
-        </div>
-        <div>
-            <div>3</div>
-            <input name="object.reroll.three.status" type="checkbox" {{checked data.reroll.three.status}}>
-        </div>
-        <div>
-            <div>4</div>
-            <input name="object.reroll.four.status" type="checkbox" {{checked data.reroll.four.status}}>
-        </div>
-        <div>
-            <div>5</div>
-            <input name="object.reroll.five.status" type="checkbox" {{checked data.reroll.five.status}}>
-        </div>
-        <div>
-            <div>6</div>
-            <input name="object.reroll.six.status" type="checkbox" {{checked data.reroll.six.status}}>
-        </div>
-        <div>
-            <div>7</div>
-            <input name="object.reroll.seven.status" type="checkbox" {{checked data.reroll.seven.status}}>
-        </div>
-        <div>
-            <div>8</div>
-            <input name="object.reroll.eight.status" type="checkbox" {{checked data.reroll.eight.status}}>
-        </div>
-        <div>
-            <div>9</div>
-            <input name="object.reroll.nine.status" type="checkbox" {{checked data.reroll.nine.status}}>
-        </div>
-        <div>
-            <div>10</div>
-            <input name="object.reroll.ten.status" type="checkbox" {{checked data.reroll.ten.status}}>
-        </div>
-    </div>
-</div>
-
 {{#ifNotEquals data.rollType 'base'}}
-{{> systems/exaltedessence-homebrew/templates/dialogues/added-charm-list.html}}
 <div class="d-flex flex-between mb-1 collapsable cursor-pointer">
     <div class="resource-label">
         {{localize "ExEss.Effects"}}
@@ -168,37 +115,13 @@
         <i class="fas fa-caret-down"></i>
     </div>
 </div>
-<div style="display:none;">
-    {{#each data.conditions as |condition key|}}
-    <div>
-        {{condition.name}}
-    </div>
-    {{/each}}
-    <div>
-        {{#if data.getimianflow}}
-        <div>
-            Getimian Flow (+1 Success)
-        </div>
-        {{/if}}
-        {{#if data.augmentattribute}}
-        <div>
-            Augmented Attribute
-        </div>
-        {{/if}}
-    </div>
-</div>
 <div class="resource grid grid-4col flex-center">
-    <label class="resource-label">{{localize "ExEss.Stunt"}}: </label>
-    <input type="checkbox" name="object.stunt" value="{{data.stunt}}" {{checked data.stunt}}>
 
     <label class="resource-label">{{localize "ExEss.WoundPenalty"}}: </label>
     <input type="checkbox" name="object.woundPenalty" value="{{data.woundPenalty}}" {{checked data.woundPenalty}}>
 
     <label class="resource-label">{{localize "ExEss.Flurry"}}: </label>
     <input type="checkbox" name="object.flurry" value="{{data.flurry}}" {{checked data.flurry}}>
-
-    <label class="resource-label">{{localize "ExEss.ArmorPenalty"}}: </label>
-    <input type="checkbox" name="object.armorPenalty" value="{{data.armorPenalty}}" {{checked data.armorPenalty}}>
 
     {{#ifEquals actor.system.details.exalt 'dragonblooded'}}
     <div class="resource-label">{{localize "ExEss.ActivateAura"}}</div>
