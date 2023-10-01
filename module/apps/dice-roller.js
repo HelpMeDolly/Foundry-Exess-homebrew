@@ -74,7 +74,8 @@ export class RollForm extends FormApplication {
             this.object.rollTwice = false;
 
             this.object.flurry = false;
-            this.object.woundPenalty = true;
+            this.object.woundPenalty = false;
+            this.object.willingnessPenalty = false;
             this.object.stunt = false;
             if (data.rollType !== 'base' && this.actor.type === 'character') {
                 this.object.stunt = true;
@@ -889,6 +890,10 @@ export class RollForm extends FormApplication {
             }
             if (this.object.woundPenalty && this.actor.system.health.penalty !== 'inc') {
                 dice -= this.actor.system.health.penalty;
+            }
+
+            if (this.object.willingnessPenalty && this.actor.system.willingness.penalty !== 'inc') {
+                dice -= this.actor.system.willingness.penalty;
             }
 
             if (this.object.flurry) {
