@@ -18,7 +18,6 @@ export class RollForm extends FormApplication {
                     if (data.abilityFirst) {
                         this.object.abilityFirst = data.abilityFirst;
                     }
-                    this._checkAttributeBonuses(); //TODO correct
                     this.object.ability = data.ability || "athletics";
                 }
                 this.object.characterType = this.actor.type;
@@ -76,7 +75,6 @@ export class RollForm extends FormApplication {
             this.object.flurry = false;
             this.object.woundPenalty = false;
             this.object.willingnessPenalty = false;
-            this.object.stunt = false;
             if (data.rollType !== 'base' && this.actor.type === 'character') {
                 this.object.stunt = true;
             }
@@ -185,7 +183,6 @@ export class RollForm extends FormApplication {
                 committed: 0,
                 power: 0,
                 anima: 0,
-                stunt: 0,
                 healthAggravated: 0,
                 healthLethal: 0,
             }
@@ -220,9 +217,6 @@ export class RollForm extends FormApplication {
                         this.getEnritchedHTML(charm);
                     }
                 }
-            }
-            if (this.object.getimianflow === undefined && this.actor.type !== 'npc') {
-                this._checkAttributeBonuses();
             }
             if (this.object.augmentattribute === undefined && this.actor.type !== 'npc') {
                 this._checkExcellencyBonuses();
@@ -491,7 +485,6 @@ export class RollForm extends FormApplication {
                     this.object.cost.healthAggravated += item.system.cost.health;
                 }
             }
-            this.object.cost.stunt += item.system.cost.stunt;
             this.object.cost.power += item.system.cost.power;
 
             this.object.diceModifier += item.system.diceroller.bonusdice;
@@ -567,18 +560,14 @@ export class RollForm extends FormApplication {
         });
 
         html.on("change", "#ability-first-select", ev => {
-            this._checkAttributeBonuses(); //TODO change
-            //this._checkExcellencyBonuses();
             this.render();
         });
 
         html.on("change", ".excellency-check-first", ev => {
-            //this._checkExcellencyFirstBonuses();
             this.render();
         });
 
         html.on("change", ".excellency-check", ev => {
-            //this._checkExcellencyBonuses();
             this.render();
         });
 
@@ -620,7 +609,6 @@ export class RollForm extends FormApplication {
                         this.object.cost.healthAggravated -= item.system.cost.health;
                     }
                 }
-                this.object.cost.stunt -= item.system.cost.stunt;
                 this.object.cost.power -= item.system.cost.power;
 
                 this.object.diceModifier -= item.system.diceroller.bonusdice;
@@ -862,11 +850,33 @@ export class RollForm extends FormApplication {
                 let abilityFirstDice = this.actor.system.abilities[this.object.abilityFirst].value;
                 let abilityDice = this.actor.system.abilities[this.object.ability].value;
 
-                if (this.object.abilityFirstExcellency) {
-                    abilityFirstDice = abilityFirstDice * 2;
-                }
-                if (this.object.abilityExcellency) {
-                    abilityDice = abilityDice * 2;
+                if(this.object.abilityFirstExcellency && this.object.abilityExcellency){
+                    switch(this.actor.system.details.exalt){
+                        case "infernal":
+                        case "solar":
+                            if (this.actor.system.abilities[this.object.ability].value > this.actor.system.abilities[this.object.abilityFirst].value){
+                                this.object.successModifier += this.actor.system.abilities[this.object.ability].value;
+                            } else {
+                                this.object.successModifier += this.actor.system.abilities[this.object.abilityFirst].value;
+                            }
+                            break;
+                        case "lunar":
+                            abilityFirstDice = abilityFirstDice * 2;
+                            abilityDice = abilityDice * 2;
+                            break;
+                        case "alchemical":
+                            this.object.doubleSuccess = 9;
+                            break;
+                        default:
+                            break;
+                    }
+                } else {
+                    if (this.object.abilityFirstExcellency) {
+                        abilityFirstDice = abilityFirstDice * 2;
+                    }
+                    if (this.object.abilityExcellency) {
+                        abilityDice = abilityDice * 2;
+                    }
                 }
 
                 dice = abilityFirstDice + abilityDice;
@@ -1510,24 +1520,6 @@ export class RollForm extends FormApplication {
         }
     }
 
-    _checkAttributeBonuses() {
-        this.object.getimianflow = false;
-        this.object.augmentattribute = false;
-        if (this.actor.type !== 'npc' || this.actor.system.creaturetype === 'exalt') {
-            if (this.actor.system.details.exalt === "getimian") {
-                if (this.object.attribute === "force" && (this.actor.system.still.total < this.actor.system.flowing.total)) {
-                    this.object.getimianflow = true;
-                }
-                if (this.object.attribute === "finesse" && (this.actor.system.still.total > this.actor.system.flowing.total)) {
-                    this.object.getimianflow = true;
-                }
-                if (this.object.attribute === "fortitude" && (this.actor.system.still.total >= (this.actor.system.flowing.total - 1) && this.actor.system.still.total <= (this.actor.system.flowing.total + 1))) {
-                    this.object.getimianflow = true;
-                }
-            }
-        }
-    }
-
     async _updateCharacterResources() {
         const actorData = duplicate(this.actor);
         var newAnimaValue = Math.max(0, actorData.system.anima.value - this.object.cost.anima + this.object.gain.anima);
@@ -1545,7 +1537,6 @@ export class RollForm extends FormApplication {
             actorData.system.motes.value = Math.max(0, actorData.system.motes.value - this.object.cost.motes - this.object.cost.committed + this.object.gain.motes);
         }
         actorData.system.motes.committed += this.object.cost.committed;
-        actorData.system.stunt.value = Math.max(0, actorData.system.stunt.value - this.object.cost.stunt);
         actorData.system.power.value = Math.max(0, actorData.system.power.value - this.object.cost.power + this.object.gain.power);
         this.object.power = actorData.system.power.value;
         actorData.system.anima.value = newAnimaValue;
