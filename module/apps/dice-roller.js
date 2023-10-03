@@ -218,9 +218,6 @@ export class RollForm extends FormApplication {
                     }
                 }
             }
-            if (this.object.augmentattribute === undefined && this.actor.type !== 'npc') {
-                this._checkExcellencyBonuses();
-            }
             this.object.target = Array.from(game.user.targets)[0] || null;
             this.object.updateTargetActorData = false;
             if (this.object.target) {
