@@ -1,6 +1,6 @@
 {
   "name": "exaltedessence-homebrew",
-  "version": "1.0.2",
+  "version": "1.1.0",
   "description": "CSS compiler for the Exalted Essence system",
   "scripts": {
     "build": "gulp",
